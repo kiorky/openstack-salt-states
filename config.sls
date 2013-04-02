@@ -19,10 +19,10 @@
 {% endmacro %}
 
 # Computed quantities (once appropriate states are deployed).
-{% set mysql_hosts = salt['publish.publish']('D@openstack.mysql:*', 'data.getval', 'openstack.mysql').values() %}
-{% set rabbitmq_hosts = salt['publish.publish']('D@openstack.rabbitmq:*', 'data.getval', 'openstack.rabbitmq').values() %}
-{% set keystone_hosts = salt['publish.publish']('D@openstack.keystone:*', 'data.getval', 'openstack.keystone').values() %}
-{% set glance_hosts = salt['publish.publish']('D@openstack.glance:*', 'data.getval', 'openstack.glance').values() %}
+{% set mysql_hosts = salt['publish.publish']('D@openstack.mysql:*', 'data.getval', 'openstack.mysql', expr_form='compound').values() %}
+{% set rabbitmq_hosts = salt['publish.publish']('D@openstack.rabbitmq:*', 'data.getval', 'openstack.rabbitmq', expr_form='compound').values() %}
+{% set keystone_hosts = salt['publish.publish']('D@openstack.keystone:*', 'data.getval', 'openstack.keystone', expr_form='compound').values() %}
+{% set glance_hosts = salt['publish.publish']('D@openstack.glance:*', 'data.getval', 'openstack.glance', expr_form='compound').values() %}
 
 # Network configuration.
 {% set default_interface = pillar.get('openstack.interface.default', 'eth0') %}
