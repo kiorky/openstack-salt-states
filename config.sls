@@ -1,12 +1,41 @@
 {% set debug = pillar.get('openstack.debug', 'True') %}
 {% set source = pillar.get('openstack.source', 'deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/folsom main') %}
 
+# Packaging.
+{% macro package(name) %}
+{{name}}:
+    pkg:
+        - installed
+    pkgrepo.managed:
+        - name: {{source}}
+        - baseurl: {{source}}
+        - humanname: openstack
+        - file: /etc/apt/sources.list.d/openstack.list
+    watch:
+        - file: /etc/yum/repos.d/openstack.repo
+        - file: /etc/apt/sources.list.d/{{source}}
+    require:
+        - pkgrepo: {{source}}
+{% endmacro %}
+
 # Computed quantities (once appropriate states are deployed).
 {% set mysql_hosts = salt['publish.publish']('D@openstack.mysql:*', 'data.getval', 'openstack.mysql').values() %}
 {% set rabbitmq_hosts = salt['publish.publish']('D@openstack.rabbitmq:*', 'data.getval', 'openstack.rabbitmq').values() %}
 {% set keystone_hosts = salt['publish.publish']('D@openstack.keystone:*', 'data.getval', 'openstack.keystone').values() %}
 {% set glance_hosts = salt['publish.publish']('D@openstack.glance:*', 'data.getval', 'openstack.glance').values() %}
 
+# Network configuration.
+{% set default_interface = pillar.get('openstack.interface.default', 'eth0') %}
+{% set internal_interface = pillar.get('openstack.interface.internal', default_interface) %}
+{% set nova_interface = pillar.get('openstack.interface.nova', default_interface) %}
+{% set public_interface = pillar.get('openstack.interface.public', default_interface) %}
+
+# Network auto-computed.
+{% set internal_ip = salt['network.ip_addrs'](interface=internal_interface)|first %}
+{% set nova_ip = salt['network.ip_addrs'](interface=nova_interface)|first %}
+{% set public_ip = salt['network.ip_addrs'](interface=public_interface)|first %}
+
+# Database configuration.
 {% set mysql_keystone_database = pillar.get('openstack.keystone.database', 'keystone') %}
 {% set mysql_keystone_username = pillar.get('openstack.keystone.username', 'keystone') %}
 {% set mysql_keystone_password = pillar.get('openstack.keystone.password', '') %}
@@ -35,8 +64,14 @@
 {% set os_password = pillar.get('openstack.admin_password', 'admin') %}
 {% set os_tenant_name = pillar.get('openstack.admin_tenant_name', 'admin') %}
 
+# Keystone configuration.
 {% set keystone_port = pillar.get('openstack.keystone.port', '5000') %}
 {% set keystone_auth = pillar.get('openstack.keystone.auth', '35357') %}
+
+# Keystone services.
+{% set nova_username = pillar.get('openstack.nova.username', 'nova') %}
+{% set nova_password = pillar.get('openstack.nova.password', '') %}
+{% set nova_tenant_name = pillar.get('openstack.nova.tenant_name', 'service') %}
 
 {% set glance_username = pillar.get('openstack.glance.username', 'glance') %}
 {% set glance_password = pillar.get('openstack.glance.password', '') %}

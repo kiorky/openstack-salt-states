@@ -1,13 +1,16 @@
+{% import "openstack/config.sls" as config with context %}
 include:
-    - openstack.nova.base
-    - openstack.nova.api
+    - base
+    - api
 
-nova-compute:
-    pkg:
-        - installed
+{{ config.package("nova-compute") }}
     service.running:
         - enable: True
         - watch:
             - file: /etc/nova/nova.conf
             - file: /etc/nova/policy.json
             - pkg: nova-compute
+    require:
+        - service: nova-api
+        - file: /etc/nova/nova.conf
+        - file: /etc/nova/policy.json

@@ -1,4 +1,4 @@
 include:
-    - openstack.nova.compute
-    - openstack.nova.network
-    - openstack.cinder.volume
+    - nova.compute
+    - nova.network
+    - cinder.volume

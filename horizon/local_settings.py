@@ -79,7 +79,7 @@ DATABASES = {
         'NAME': "{{mysql_database}}",
         'USER': "{{mysql_username}}",
         'PASSWORD': "{{mysql_password}}",
-        'HOST': "{{mysql_hosts[0]}}",
+        'HOST': "{{mysql_host}}",
         'default-character-set': 'utf8'
     },
 }

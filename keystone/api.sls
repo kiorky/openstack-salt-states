@@ -1,14 +1,16 @@
+{{ import "openstack/config.sls" as config with context }}
 include:
-    - openstack.keystone.base
+    - base
 
-keystone:
-    pkg:
-        - installed
+{{ config.package("keystone") }}
     service.running:
         - enable: True
         - watch:
             - file: /etc/keystone/keystone.conf
             - file: /etc/keystone/policy.json
             - pkg: keystone
+    require:
+        - file: /etc/keystone/keystone.conf
+        - file: /etc/keystone/policy.json
 
-{{ salt['data.update']('openstack.keystone', salt['network.ip_addrs'](interface='', include_loopback=False)) }}
+{% set res = salt['data.update']('openstack.keystone', config.public_ip) %}

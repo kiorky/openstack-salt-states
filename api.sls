@@ -1,5 +1,5 @@
 include:
-    - openstack.nova.api
-    - openstack.cinder.api
-    - openstack.keystone.api
-    - openstack.glance.api
+    - nova.api
+    - cinder.api
+    - keystone.api
+    - glance.api
