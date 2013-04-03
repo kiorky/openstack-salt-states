@@ -1,8 +1,10 @@
 {% import "openstack/config.sls" as config with context %}
 
 glance:
-    - user.present
-    - group.present
+    user:
+        - present
+    group:
+        - present
 
 /etc/glance/policy.json:
     file.managed:

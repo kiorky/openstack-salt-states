@@ -16,9 +16,6 @@ include:
     service.running:
         - enable: True
         - watch:
-            - file: /etc/nova/nova.conf
-            - file: /etc/nova/policy.json
-            - file: /etc/nova/api-paste.ini
             - pkg: nova-api
     require:
         - file: /etc/nova/nova.conf
@@ -29,8 +26,6 @@ include:
     service.running:
         - enable: True
         - watch:
-            - file: /etc/nova/nova.conf
-            - file: /etc/nova/policy.json
             - pkg: nova-objectstore
     require:
         - file: /etc/nova/nova.conf
@@ -40,8 +35,6 @@ include:
     service.running:
         - enable: True
         - watch:
-            - file: /etc/nova/nova.conf
-            - file: /etc/nova/policy.json
             - pkg: nova-novncproxy
     require:
         - file: /etc/nova/nova.conf
@@ -51,8 +44,6 @@ include:
     service.running:
         - enable: True
         - watch:
-            - file: /etc/nova/nova.conf
-            - file: /etc/nova/policy.json
             - pkg: nova-consoleauth
     require:
         - file: /etc/nova/nova.conf
@@ -62,9 +53,9 @@ include:
     service.running:
         - enable: True
         - watch:
-            - file: /etc/nova/nova.conf
-            - file: /etc/nova/policy.json
             - pkg: nova-cert
     require:
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
+
+{% set res = salt['data.update']('openstack.nova.api', config.public_ip) %}

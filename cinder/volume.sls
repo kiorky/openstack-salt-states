@@ -1,6 +1,7 @@
 {% import "openstack/config.sls" as config with context %}
 include:
     - base
+    - ceph
 
 {{ config.package("cinder-volume") }}
     service.running:
@@ -12,3 +13,4 @@ include:
     require:
         - file: /etc/cinder/cinder.conf
         - file: /etc/cinder/policy.json
+        - file: /etc/ceph/ceph.conf

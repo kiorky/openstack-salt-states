@@ -36,4 +36,5 @@ peer to peer communication across the board you can use:
 Configuration
 -------------
 
-You can find full information about configuration values in `config.sls`.
+You can find full information about configuration values in `config.sls` and
+`ceph/config.sls`.

@@ -1,8 +1,10 @@
 {% import "openstack/config.sls" as config with context %}
 
 cinder:
-    - user.present
-    - group.present
+    user:
+        - present
+    group:
+        - present
 
 /etc/cinder/cinder.conf:
     file.managed:

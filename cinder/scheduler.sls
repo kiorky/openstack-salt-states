@@ -6,8 +6,6 @@ include:
     service.running:
         - enable: True
         - watch:
-            - file: /etc/cinder/cinder.conf
-            - file: /etc/cinder/policy.json
             - pkg: cinder-scheduler
     require:
         - file: /etc/cinder/cinder.conf
