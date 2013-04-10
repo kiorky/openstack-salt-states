@@ -36,7 +36,23 @@ peer to peer communication across the board you can use:
 Ceph configuration
 ------------------
 
-    /sbin/mkcephfs -a -c /etc/ceph/ceph.conf --mkbtrfs --no-copy-conf
+First, setup some pillar data for your storage configuration.
+
+    ceph:
+        devices:
+            node-0025904fc1de:
+                0: sdb
+                1: sdc
+            node-0025904fc34c:
+                2: sdb
+                3: sdc
+
+Then run `state.sls` `openstack.ceph` to deploy the configuration.
+To make the cluster, you will then run:
+
+    mkcephfs -a -c /etc/ceph/ceph.conf --mkfs
+
+That's it!
 
 Configuration
 -------------
