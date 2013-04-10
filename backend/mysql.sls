@@ -81,19 +81,5 @@ horizon:
         - host: "%"
     require:
         - service: mysql
-quantum:
-    mysql_database.present:
-        - name: {{ config.mysql_quantum_database }}
-    mysql_user.present:
-        - name: {{ config.mysql_quantum_username }}
-        - password: {{ config.mysql_quantum_password }}
-        - host: "%"
-    mysql_grants.present:
-        - grant: all privileges
-        - database: {{ config.mysql_quantum_database }}.*
-        - user: {{ config.mysql_quantum_username }}
-        - host: "%"
-    require:
-        - service: mysql
 
 {% set res = salt['data.update']('openstack.mysql', config.internal_ip) %}

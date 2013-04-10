@@ -33,6 +33,11 @@ peer to peer communication across the board you can use:
         .*:
             - .*
 
+Ceph configuration
+------------------
+
+    /sbin/mkcephfs -a -c /etc/ceph/ceph.conf --mkbtrfs --no-copy-conf
+
 Configuration
 -------------
 

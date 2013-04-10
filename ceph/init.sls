@@ -2,8 +2,8 @@
 
 ceph-keyring:
   cmd.run:
-      - name: 'wget -q -O - https://raw.github.com/ceph/ceph/master/keys/release.asc | sudo apt-key add -'
-      - unless: 'apt-key list | grep -q -i ceph' 
+      - name: wget -q -O - https://raw.github.com/ceph/ceph/master/keys/release.asc | sudo apt-key add -
+      - unless: apt-key list | grep -q -i ceph'
 ceph:
     pkgrepo.managed:
         - name: {{ config.source }}
@@ -25,31 +25,29 @@ ceph:
         - template: jinja
         - context:
             devices: {{ config.devices }}
+            fsid: {{ config.fsid }}
+            ip: {{ config.ip }}
 
-{% set i = 0 %}
-{% for (host, _) in config.devices|dictsort %}
+{% for host in config.devices.keys()|sort %}
 {% if grains['localhost'] == host %}
-/var/lib/ceph/mon/ceph-{{i}}:
+/var/lib/ceph/mon/ceph-{{host}}:
     file.directory:
         - owner: root
         - group: root
         - mode: 0755
         - makedirs: true
 {% endif %}
-{% set i = i + 1 %}
 {% endfor %}
 
-{% set i = 0 %}
 {% for (host, devices) in config.devices|dictsort %}
-{% for device in devices %}
+{% for (id, device) in devices|dictsort %}
 {% if grains['localhost'] == host %}
-/var/lib/ceph/osd/ceph-{{i}}:
+/var/lib/ceph/osd/ceph-{{id}}:
     file.directory:
         - owner: root
         - group: root
         - mode: 0755
         - makedirs: true
 {% endif %}
-{% set i = i + 1 %}
 {% endfor %}
 {% endfor %}
