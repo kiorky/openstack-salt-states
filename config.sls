@@ -115,3 +115,4 @@ echo nova {{ nova_ip }}:
 {% set cinder_api_hosts = hosts.get('cinder', [internal_ip]) %}
 {% set keystone_hosts = hosts.get('keystone', [internal_ip]) %}
 {% set glance_hosts = hosts.get('glance', [internal_ip]) %}
+{% set novnc_hosts = hosts.get('novnc', [internal_ip]) %}

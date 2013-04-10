@@ -36,6 +36,7 @@ nova:
             rabbit_host: {{ config.rabbitmq_hosts|first }}
             rabbit_user: {{ config.rabbitmq_user }}
             rabbit_password: {{ config.rabbitmq_password }}
+            novnc_host: {{ config.novnc_hosts|first }}
     require:
         - user: nova
         - group: nova
