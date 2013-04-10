@@ -23,5 +23,3 @@ rabbitmq:
         - read: .*
     require:
         - service: rabbitmq-server
-
-{% set res = salt['data.update']('openstack.rabbitmq', config.internal_ip) %}

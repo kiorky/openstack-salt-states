@@ -1,6 +1,4 @@
 {% import "openstack/config.sls" as config with context %}
-{% set mysql_hosts = salt['publish.publish']('D@openstack.mysql:*', 'data.getval', 'openstack.mysql', expr_form='compound').values() %}
-{% set keystone_hosts = salt['publish.publish']('D@openstack.keystone:*', 'data.getval', 'openstack.keystone', expr_form='compound').values() %}
 
 include:
     - base
@@ -61,5 +59,3 @@ include:
         - file: /etc/glance/policy.json
         - file: /etc/glance/glance-registry-paste.ini
         - file: /etc/glance/glance-registry.conf
-
-{% set res = salt['data.update']('openstack.glance.registry', config.public_ip) %}

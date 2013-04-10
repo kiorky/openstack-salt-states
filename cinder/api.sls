@@ -25,5 +25,3 @@ include:
         - file: /etc/cinder/cinder.conf
         - file: /etc/cinder/policy.json
         - file: /etc/cinder/api-paste.ini
-
-{% set res = salt['data.update']('openstack.cinder.api', config.public_ip) %}

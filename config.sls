@@ -107,3 +107,11 @@ echo public {{ public_ip }}:
 echo nova {{ nova_ip }}:
     cmd:
         - run
+
+{% set hosts = openstack.get('hosts', {}) %}
+{% set mysql_hosts = hosts.get('mysql', [internal_ip]) %}
+{% set rabbitmq_hosts = hosts.get('rabbitmq', [internal_ip]) %}
+{% set nova_api_hosts = hosts.get('nova', [internal_ip]) %}
+{% set cinder_api_hosts = hosts.get('cinder', [internal_ip]) %}
+{% set keystone_hosts = hosts.get('keystone', [internal_ip]) %}
+{% set glance_hosts = hosts.get('glance', [internal_ip]) %}

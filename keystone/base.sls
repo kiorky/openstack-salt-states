@@ -1,6 +1,4 @@
 {% import "openstack/config.sls" as config with context %}
-{% set nova_api_hosts = salt['publish.publish']('D@openstack.nova.api:*', 'data.getval', 'openstack.nova.api', expr_form='compound').values() %}
-{% set cinder_api_hosts = salt['publish.publish']('D@openstack.cinder.api:*', 'data.getval', 'openstack.cinder.api', expr_form='compound').values() %}
 
 keystone:
     - user.present

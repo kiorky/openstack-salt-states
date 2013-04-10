@@ -17,22 +17,6 @@ example, this will generally be `/srv/salt/openstack`.
 This structure was chosen so that you can easily import it as a submodule
 within a git repo with your other salt states (and possibly pillar data).
 
-Enable peer to peer interface
------------------------------
-
-In order to use these states, you must enable appropriate peer to peer
-communicate. Minions query each other for information about deployed
-openstack states.
-
-See the full salt documentation for fine-grained control, but to enable
-peer to peer communication across the board you can use:
-
-`/etc/salt/master.d/peer.conf`
-
-    peer:
-        .*:
-            - .*
-
 Ceph configuration
 ------------------
 
@@ -47,8 +31,8 @@ First, setup some pillar data for your storage configuration.
                 2: sdb
                 3: sdc
 
-Then run `state.sls` `openstack.ceph` to deploy the configuration.
-To make the cluster, you will then run:
+Then run `state.sls` `openstack.ceph` on all participating nodes in order to
+deploy the configuration.  To make the cluster, you will then run:
 
     mkcephfs -a -c /etc/ceph/ceph.conf --mkfs
 

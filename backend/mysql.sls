@@ -81,5 +81,3 @@ horizon:
         - host: "%"
     require:
         - service: mysql
-
-{% set res = salt['data.update']('openstack.mysql', config.internal_ip) %}
