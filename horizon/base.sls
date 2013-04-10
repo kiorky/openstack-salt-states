@@ -1,5 +1,5 @@
 {% import "openstack/config.sls" as config with context %}
-{% set keystone_hosts = salt['publish.publish']('D@openstack.keystone:*', 'data.getval', 'openstack.keystone', expr_form='compound', timeout=1).values() %}
+{% set keystone_hosts = salt['publish.publish']('D@openstack.keystone:*', 'data.getval', 'openstack.keystone', expr_form='compound').values() %}
 
 /etc/openstack-dashboard/local_settings.py:
     file.managed:

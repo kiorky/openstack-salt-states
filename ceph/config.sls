@@ -5,5 +5,4 @@
 {% set fsid = ceph.get('fsid', '') %}
 {% set source = ceph.get('source', 'deb http://ceph.com/debian precise main') %}
 {% set devices = ceph.get('devices', {}) %}
-{% set monno = 0 %}
-{% set osdno = 0 %}
+{% set auth = ceph.get('auth', {}) %}

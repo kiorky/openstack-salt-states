@@ -51,3 +51,16 @@ ceph:
 {% endif %}
 {% endfor %}
 {% endfor %}
+
+{% for id in config.auth %}
+/etc/ceph/ceph.{{id}}.keyring:
+    file.managed:
+        - source: salt://openstack/ceph/keyring
+        - owner: {{config.auth[id].get("owner", "root")}}
+        - group: {{config.auth[id].get("group", "root")}}
+        - mode: {{config.auth[id].get("mode", 0600)}}
+        - template: jinja
+        - context:
+            id: {{id}}
+            key: {{config.auth[id].get("key", "")}}
+{% endfor %}

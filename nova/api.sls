@@ -1,6 +1,6 @@
 {% import "openstack/config.sls" as config with context %}
 include:
-    - base
+    - openstack.nova.base
 
 /etc/nova/api-paste.ini:
     file.managed:
@@ -17,7 +17,11 @@ include:
         - enable: True
         - watch:
             - pkg: nova-api
+            - file: /etc/nova/nova.conf
+            - file: /etc/nova/policy.json
+            - file: /etc/nova/api-paste.ini
     require:
+        - pkg: nova-api
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
         - file: /etc/nova/api-paste.ini
@@ -27,7 +31,10 @@ include:
         - enable: True
         - watch:
             - pkg: nova-objectstore
+            - file: /etc/nova/nova.conf
+            - file: /etc/nova/policy.json
     require:
+        - pkg: nova-objectstore
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
 
@@ -36,7 +43,10 @@ include:
         - enable: True
         - watch:
             - pkg: nova-novncproxy
+            - file: /etc/nova/nova.conf
+            - file: /etc/nova/policy.json
     require:
+        - pkg: nova-novncproxy
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
 
@@ -45,7 +55,10 @@ include:
         - enable: True
         - watch:
             - pkg: nova-consoleauth
+            - file: /etc/nova/nova.conf
+            - file: /etc/nova/policy.json
     require:
+        - pkg: nova-consoleauth
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
 
@@ -54,7 +67,10 @@ include:
         - enable: True
         - watch:
             - pkg: nova-cert
+            - file: /etc/nova/nova.conf
+            - file: /etc/nova/policy.json
     require:
+        - pkg: nova-cert
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
 

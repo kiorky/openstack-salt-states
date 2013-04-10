@@ -17,7 +17,11 @@ include:
         - enable: True
         - watch:
             - pkg: cinder-api
+            - file: /etc/cinder/cinder.conf
+            - file: /etc/cinder/policy.json
+            - file: /etc/cinder/api-paste.ini
     require:
+        - pkg: cinder-api
         - file: /etc/cinder/cinder.conf
         - file: /etc/cinder/policy.json
         - file: /etc/cinder/api-paste.ini

@@ -3,10 +3,14 @@
 {% set source = openstack.get('source', 'deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/folsom main') %}
 
 # Packaging.
+# NOTE: This goes hand-in-hand with the source listed above.
+# For the time being, these recipes only support Ubuntu precise w/
+# cloud archive -- although it would be a straight-forward path to
+# support other distributions.
 {% macro package(name) %}
-ubuntu-cloud-keyring:
-    pkg:
-        - latest
+keyring-{{name}}:
+    pkg.latest:
+        - name: ubuntu-cloud-keyring
 {{name}}:
     pkg:
         - latest
@@ -89,10 +93,9 @@ ubuntu-cloud-keyring:
 
 # Keystone services.
 {% set service_tenant_name = keystone.get('tenant_name', 'service') %}
-{% set nova_username = nova.get('username', 'nova') %}
-{% set nova_password = nova.get('password', '') %}
-{% set glance_username = glance.get('username', 'glance') %}
-{% set glance_password = glance.get('password', '') %}
+{% set keystone_nova_password = keystone.get('nova', '') %}
+{% set keystone_glance_password = keystone.get('glance', '') %}
+{% set keystone_cinder_password = keystone.get('cinder', '') %}
 
 # Debug output.
 echo internal {{ internal_ip }}:
