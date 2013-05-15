@@ -1,7 +1,7 @@
 {% import "openstack/config.sls" as config with context %}
 
 include:
-    - openstack.ceph
+    - ceph
     - openstack.glance.base
 
 /etc/glance/glance-api-paste.ini:

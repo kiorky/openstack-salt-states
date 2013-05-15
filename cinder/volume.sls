@@ -1,6 +1,6 @@
 {% import "openstack/config.sls" as config with context %}
 include:
-    - openstack.ceph
+    - ceph
     - openstack.cinder.base
 
 {{ config.package("cinder-volume") }}

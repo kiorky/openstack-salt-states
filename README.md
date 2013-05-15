@@ -30,8 +30,11 @@ First, setup some pillar data for your storage configuration.
             node-0025904fc34c:
                 2: sdb
                 3: sdc
+        monitors:
+            - node-0025904fc1de
+            - node-0025904fc34c
 
-Then run `state.sls` `openstack.ceph` on all participating nodes in order to
+Then run `state.sls` `ceph` on all participating nodes in order to
 deploy the configuration.  To make the cluster, you will then run:
 
     mkcephfs -a -c /etc/ceph/ceph.conf --mkfs
