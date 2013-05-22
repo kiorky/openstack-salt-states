@@ -1,2 +1,3 @@
-{% include "openstack/control/mysql.sls" %}
-{% include "openstack/control/rabbitmq.sls" %}
+include:
+    - openstack.backend.mysql
+    - openstack.backend.rabbitmq

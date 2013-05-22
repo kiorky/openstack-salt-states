@@ -38,6 +38,7 @@ nova:
             novnc_host: {{ config.novnc_hosts|first }}
             az: {{ config.az }}
             default_az: {{ config.default_az }}
+            metadata_secret: {{ config.metadata_secret }}
     require:
         - user: nova
         - group: nova

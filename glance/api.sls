@@ -75,5 +75,6 @@ include:
 make-images:
     cmd.run:
         - name: rados mkpool images
+        - unless: rados lspools | grep images
     require:
         - file: /etc/ceph/ceph.conf

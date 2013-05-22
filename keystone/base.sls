@@ -59,13 +59,21 @@ keystone:
             glance_password: {{ config.keystone_glance_password }}
             cinder_username: cinder
             cinder_password: {{ config.keystone_cinder_password }}
+            quantum_username: quantum
+            quantum_password: {{ config.keystone_quantum_password }}
             public_ip: {{ config.public_ip }}
             nova_ip: {{ config.nova_api_hosts|first }}
             glance_ip: {{ config.glance_hosts|first }}
             cinder_ip : {{ config.cinder_api_hosts|first }}
+            quantum_ip : {{ config.quantum_api_hosts|first }}
             nova_api_port: {{ config.compute_port }}
             glance_api_port: {{ config.glance_api_port }}
             cinder_api_port: {{ config.volume_port }}
+            quantum_api_port: {{ config.network_port }}
+            mysql_username: {{ config.mysql_keystone_username }}
+            mysql_password: {{ config.mysql_keystone_password }}
+            mysql_host: {{ config.mysql_hosts[0] }}
+            mysql_database: {{ config.mysql_keystone_database }}
     require:
         - user: keystone
         - group: keystone

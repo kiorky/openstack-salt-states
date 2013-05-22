@@ -4,6 +4,7 @@ include:
 
 {{ config.package("cinder-scheduler") }}
     service.running:
+        - name: cinder-scheduler
         - enable: True
         - watch:
             - pkg: cinder-scheduler

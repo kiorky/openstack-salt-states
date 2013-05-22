@@ -1,3 +1,4 @@
-{% include "openstack/nova/compute.sls" %}
-{% include "openstack/cinder/volume.sls" %}
-{% include "openstack/quantum/network.sls" %}
+include:
+    - openstack.nova.compute
+    - openstack.cinder.volume
+    - openstack.quantum.network

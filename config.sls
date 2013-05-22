@@ -68,6 +68,7 @@ pkg-{{name}}:
 {% set mysql_nova_database = nova.get('database', 'nova') %}
 {% set mysql_nova_username = nova.get('username', 'nova') %}
 {% set mysql_nova_password = nova.get('password', 'nova') %}
+{% set metadata_secret = nova.get('metadata_secret', 'password') %}
 
 {% set glance = openstack.get('glance', {}) %}
 {% set mysql_glance_database = glance.get('database', 'glance') %}
@@ -110,6 +111,7 @@ pkg-{{name}}:
 {% set ec2_port = api.get('ec2', '8773') %}
 {% set compute_port = api.get('compute', '8774') %}
 {% set volume_port = api.get('volume', '8776') %}
+{% set network_port = api.get('volume', '9696') %}
 {% set glance_api_port = glance.get('api', '9292') %}
 {% set glance_registry_port = glance.get('registry', '9191') %}
 

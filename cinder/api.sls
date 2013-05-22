@@ -28,7 +28,7 @@ include:
 
 {{ config.package("cinder-api") }}
     service.running:
-        -name: cinder-api
+        - name: cinder-api
         - enable: True
         - watch:
             - pkg: cinder-api

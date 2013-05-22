@@ -5,6 +5,7 @@ include:
 
 {{ config.package("cinder-volume") }}
     service.running:
+        - name: cinder-volume
         - enable: True
         - watch:
             - pkg: cinder-volume
@@ -21,15 +22,7 @@ include:
         - file: /etc/ceph/ceph.conf
         - file: /etc/ceph/ceph.client.volumes.keyring
 
-/etc/cinder/secret.xml:
-    file.managed:
-        - source: salt://openstack/cinder/secret.xml
-        - user: cinder
-        - group: cinder
-        - mode: 0600
-        - template: jinja
-        - context:
-            secret: {{ salt['cmd.run']("ceph auth get-or-create client.volumes mon 'allow rwx' osd 'allow *' | grep key | awk '{print $3;}'") }}
+{% set secret = salt['cmd.run']("ceph auth get-or-create client.volumes mon 'allow rwx' osd 'allow *' | grep key | awk '{print $3;}'") %}
 
 /etc/ceph/ceph.client.volumes.keyring:
     file.managed:
@@ -39,7 +32,17 @@ include:
         - mode: 0600
         - template: jinja
         - context:
-            secret: {{ salt['cmd.run']("ceph auth get-or-create client.volumes mon 'allow rwx' osd 'allow *' | grep key | awk '{print $3;}'") }}
+            secret: '{{ secret }}'
+
+/etc/cinder/secret.xml:
+    file.managed:
+        - source: salt://openstack/cinder/secret.xml
+        - user: cinder
+        - group: cinder
+        - mode: 0600
+        - template: jinja
+        - context:
+            secret: '{{ secret }}'
 
 define-secret:
     cmd.run:
@@ -50,5 +53,6 @@ define-secret:
 make-volumes:
     cmd.run:
         - name: rados mkpool volumes
+        - unless: rados lspools | grep volumes
     require:
         - file: /etc/ceph/ceph.conf

@@ -32,8 +32,10 @@ include:
         - user: glance
         - group: glance
         - mode: 0600
+        - template: jinja
         - context:
             debug: {{ config.debug }}
+            ip: {{ config.internal_ip }}
             port: {{ config.glance_registry_port }}
             mysql_username: {{ config.mysql_glance_username }}
             mysql_password: {{ config.mysql_glance_password }}

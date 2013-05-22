@@ -11,7 +11,7 @@ mysql:
     watch:
         - pkg.installed: mysql-server
 
-keystone:
+mysql-keystone:
     mysql_database.present:
         - name: {{ config.mysql_keystone_database }}
     mysql_user.present:
@@ -25,7 +25,7 @@ keystone:
         - host: "%"
     require:
         - service: mysql
-nova:
+mysql-nova:
     mysql_database.present:
         - name: {{ config.mysql_nova_database }}
     mysql_user.present:
@@ -39,7 +39,7 @@ nova:
         - host: "%"
     require:
         - service: mysql
-glance:
+mysql-glance:
     mysql_database.present:
         - name: {{ config.mysql_glance_database }}
     mysql_user.present:
@@ -53,7 +53,7 @@ glance:
         - host: "%"
     require:
         - service: mysql
-cinder:
+mysql-cinder:
     mysql_database.present:
         - name: {{ config.mysql_cinder_database }}
     mysql_user.present:
@@ -67,7 +67,21 @@ cinder:
         - host: "%"
     require:
         - service: mysql
-horizon:
+mysql-quantum:
+    mysql_database.present:
+        - name: {{ config.mysql_quantum_database }}
+    mysql_user.present:
+        - name: {{ config.mysql_quantum_username }}
+        - password: {{ config.mysql_quantum_password }}
+        - host: "%"
+    mysql_grants.present:
+        - grant: all privileges
+        - database: {{ config.mysql_quantum_database }}.*
+        - user: {{ config.mysql_quantum_username }}
+        - host: "%"
+    require:
+        - service: mysql
+mysql-horizon:
     mysql_database.present:
         - name: {{ config.mysql_horizon_database }}
     mysql_user.present:
