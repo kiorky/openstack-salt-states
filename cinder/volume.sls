@@ -33,6 +33,8 @@ include:
         - template: jinja
         - context:
             secret: '{{ secret }}'
+        - require:
+            - file: /etc/ceph/ceph.client.volumes.keyring
 
 /etc/cinder/secret.xml:
     file.managed:
