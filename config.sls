@@ -20,7 +20,7 @@ pkg-{{name}}:
         - name: {{source}}
         - baseurl: {{source}}
         - humanname: openstack
-        - file: /etc/apt/sources.list.d/openstack.list
+        - file: /etc/apt/sources.list.d/openstack-{{version}}.list
     require:
         - pkgrepo: {{source}}
         - pkg: ubuntu-cloud-keyring
