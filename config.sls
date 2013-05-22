@@ -35,6 +35,10 @@ keyring-{{name}}:
 {% set nova_interface = interfaces.get('nova', default_interface) %}
 {% set internal_network = networks.get('internal', '') %}
 
+# Common services configuration.
+{% set az = openstack.get('availability_zone', 'nova') %}
+{% set default_az = openstack.get('default_availability_zone', 'nova') %}
+
 # Ugly network IP extraction (automatic based on subnet from config).
 {% set _pre_cmd = "python -c 'from salt.modules.network import interfaces, _calculate_subnet; print ((([x for x in [[ip.get(\"address\") for ip in ipv4 if \"" %}
 {% set _post_cmd = "\" == _calculate_subnet(ip.get(\"address\"), ip.get(\"netmask\"))] for ipv4 in [itr.get(\"inet\") for itr in interfaces().values() if itr.get(\"inet\")]] if len(x) > 0] + [[]])[0]) + [\"\"])[0]'" %}
