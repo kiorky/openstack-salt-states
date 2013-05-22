@@ -25,6 +25,7 @@ cinder:
             glance_host: {{ config.glance_hosts|first }}
             glance_port: {{ config.glance_api_port }}
             ip: {{ config.internal_ip }}
+            volume_port: {{ config.volume_port }}
 
 /etc/cinder/policy.json:
     file.managed:

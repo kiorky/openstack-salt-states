@@ -1,5 +1,6 @@
 {% set canary = pillar.get('openstack', {}).get('canary', {}) %}
-{% set source = canary.get('source', 'deb http://downloads.gridcentriclabs.com/packages/canary/folsom/ubuntu gridcentric multiverse') %}
+{% set version = pillar.get('openstack', {}).get('version', 'grizzly') %}
+{% set source = canary.get('source', 'deb http://downloads.gridcentriclabs.com/packages/canary/%s/ubuntu gridcentric multiverse' % version) %}
 
 {% macro package(name) %}
 {{name}}:

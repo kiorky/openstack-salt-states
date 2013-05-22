@@ -1,5 +1,5 @@
 include:
-    - base
+    - openstack.horizon.base
 
 apache2:
     pkg:
@@ -8,6 +8,7 @@ apache2:
         - enable: True
         - watch:
             - pkg: openstack-dashboard
+            - file: /etc/openstack-dashboard/local_settings.py
     require:
         - pkg: openstack-dashboard
         - file: /etc/openstack-dashboard/local_settings.py

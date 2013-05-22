@@ -4,6 +4,7 @@ include:
 
 {{ config.package("nova-api") }}
     service.running:
+        - name: nova-api
         - enable: True
         - watch:
             - pkg: nova-api
@@ -18,6 +19,7 @@ include:
 
 {{ config.package("nova-compute") }}
     service.running:
+        - name: nova-compute
         - enable: True
         - watch:
             - pkg: nova-compute

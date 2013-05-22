@@ -1,6 +1,6 @@
 {% import "openstack/config.sls" as config with context %}
 include:
-    - base
+    - openstack.cinder.base
 
 {{ config.package("cinder-scheduler") }}
     service.running:

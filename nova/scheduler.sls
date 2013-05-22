@@ -4,6 +4,7 @@ include:
 
 {{ config.package("nova-scheduler") }}
     service.running:
+        - name: nova-scheduler
         - enable: True
         - watch:
             - pkg: nova-scheduler

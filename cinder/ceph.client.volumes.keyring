@@ -1,0 +1,2 @@
+[client.volumes]
+	key = {{secret}}

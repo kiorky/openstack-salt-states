@@ -17,7 +17,6 @@ nova:
             debug: {{ config.debug }}
             ec2_port: {{ config.ec2_port }}
             compute_port: {{ config.compute_port }}
-            fixed: {{ config.nova }}
             glance_host: {{ config.glance_hosts|first }}
             glance_port: {{ config.glance_api_port }}
             keystone_host: {{ config.keystone_hosts|first }}
