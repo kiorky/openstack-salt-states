@@ -1,3 +1,3 @@
 include:
-    - openstack.quantum.l2-agent
+    - openstack.quantum.ovs-plugin-agent
     - openstack.quantum.metadata-agent
