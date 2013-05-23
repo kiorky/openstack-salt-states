@@ -1,5 +1,4 @@
 include:
-    - openstack.quantum.server
-    - openstack.quantum.ovs-plugin-agent
+    - openstack.quantum.network
     - openstack.quantum.l3-agent
-    - openstack.quantum.dhcp-agent
+    - openstack.quantum.server
