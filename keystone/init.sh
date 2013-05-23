@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 export SERVICE_TOKEN={{token}}
-export SERVICE_ENDPOINT=http://{{public_ip}}:{{auth}}/v2.0
+export SERVICE_ENDPOINT=http://{{keystone_ip}}:{{auth}}/v2.0
 
 # Recreate the database.
 if [ "x$KEYSTONE_CLEAN" = "xy" ]; then
@@ -50,9 +50,9 @@ keystone user-role-add --user-id $NETWORK_USER \
 # Keystone service.
 KEYSTONE_SERVICE=$(get_id keystone service-create --name=keystone --type=identity --description="Keystone Identity Service")
 keystone endpoint-create --region RegionOne --service-id $KEYSTONE_SERVICE \
-    --publicurl "http://{{public_ip}}:{{auth}}/v2.0" \
-    --adminurl "http://{{public_ip}}:{{auth}}/v2.0" \
-    --internalurl "http://{{public_ip}}:{{auth}}/v2.0"
+    --publicurl "http://{{keystone_ip}}:{{auth}}/v2.0" \
+    --adminurl "http://{{keystone_ip}}:{{auth}}/v2.0" \
+    --internalurl "http://{{keystone_ip}}:{{auth}}/v2.0"
 
 # Nova service.
 NOVA_SERVICE=$(get_id keystone service-create --name=nova --type=compute --description="Nova Compute Service")

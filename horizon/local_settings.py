@@ -90,3 +90,4 @@ QUANTUM_URL = '%s' % OPENSTACK_HOST
 QUANTUM_PORT = '9696'
 QUANTUM_TENANT = '1234'
 QUANTUM_CLIENT_VERSION='0.1'
+{% if cobalt %}import sys; mod = sys.modules['openstack_dashboard.settings']; mod.INSTALLED_APPS += ('cobalt.horizon',){% endif %}

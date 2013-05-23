@@ -16,3 +16,11 @@ include:
         - pkg: nova-compute
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
+
+{{ config.package("libvirt-bin") }}
+    service.running:
+        - name: libvirt-bin
+        - enable: True
+
+{{ config.vms("cobalt-compute") }}
+{{ config.vms("vms-apparmor") }}

@@ -25,20 +25,27 @@ nova:
             mysql_password: {{ config.mysql_nova_password }}
             mysql_host: {{ config.mysql_hosts|first }}
             mysql_database: {{ config.mysql_nova_database }}
-            nova_interface: {{ config.nova_interface }}
-            nova_ip: {{ config.nova_ip }}
             internal_ip: {{ config.internal_ip }}
-            public_ip: {{ config.public_ip }}
-            public_interface: {{ config.public_interface }}
-            public_cidr: {{ config.public_network }}
-            fixed_cidr: {{ config.nova_network }}
             rabbit_host: {{ config.rabbitmq_hosts|first }}
             rabbit_user: {{ config.rabbitmq_user }}
             rabbit_password: {{ config.rabbitmq_password }}
             novnc_host: {{ config.novnc_hosts|first }}
+            public_ip: {{ config.public_ip }}
             az: {{ config.az }}
             default_az: {{ config.default_az }}
             metadata_secret: {{ config.metadata_secret }}
+            network_port: {{ config.network_port }}
+            keystone_host: {{ config.keystone_hosts|first }}
+            keystone_auth: {{ config.keystone_auth }}
+            quantum_host: {{ config.quantum_api_hosts|first }}
+            quantum_tenant_name: {{ config.service_tenant_name }}
+            quantum_username: quantum
+            quantum_password: {{ config.keystone_quantum_password }}
+{% if config.vms_key %}
+            cobalt: True
+{% else %}
+            cobalt: False
+{% endif %}
     require:
         - user: nova
         - group: nova

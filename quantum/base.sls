@@ -22,7 +22,7 @@ quantum:
             mysql_password: {{ config.mysql_quantum_password }}
             mysql_database: {{ config.mysql_quantum_database }}
             mysql_host: {{ config.mysql_hosts|first }}
-            ip: {{ config.internal_ip }}
+            public_ip: {{ config.public_ip }}
             network_port: {{ config.network_port }}
             keystone_host: {{ config.keystone_hosts|first }}
             keystone_auth: {{ config.keystone_auth }}

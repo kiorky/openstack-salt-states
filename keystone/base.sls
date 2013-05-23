@@ -17,7 +17,7 @@ keystone:
             port: {{ config.keystone_port }}
             auth: {{ config.keystone_auth }}
             token: {{ config.keystone_token }}
-            public_ip: {{ config.public_ip }}
+            keystone_ip: {{ config.keystone_hosts|first }}
             debug: {{ config.debug }}
             mysql_username: {{ config.mysql_keystone_username }}
             mysql_password: {{ config.mysql_keystone_password }}
@@ -61,7 +61,7 @@ keystone:
             cinder_password: {{ config.keystone_cinder_password }}
             quantum_username: quantum
             quantum_password: {{ config.keystone_quantum_password }}
-            public_ip: {{ config.public_ip }}
+            keystone_ip: {{ config.keystone_hosts|first }}
             nova_ip: {{ config.nova_api_hosts|first }}
             glance_ip: {{ config.glance_hosts|first }}
             cinder_ip : {{ config.cinder_api_hosts|first }}

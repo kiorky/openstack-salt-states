@@ -15,7 +15,20 @@
             mysql_database: {{ config.mysql_horizon_database }}
             mysql_username: {{ config.mysql_horizon_username }}
             mysql_password: {{ config.mysql_horizon_password }}
+{% if config.vms_key %}
+            cobalt: True
+{% else %}
+            cobalt: False
+{% endif %}
 
 {{ config.package("openstack-dashboard") }}
     require:
         - file: /etc/openstack-dashboard/local_settings.py
+
+{{ config.vms("cobalt-horizon") }}
+{% if config.vms_key %}
+    require:
+        - pkg: openstack-dashboard
+    watch:
+        - pkg: openstack-dashboard
+{% endif %}

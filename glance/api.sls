@@ -53,7 +53,7 @@ include:
             glance_password: {{ config.keystone_glance_password }}
             registry_host: {{ config.glance_hosts|first }}
             registry_port: {{ config.glance_registry_port }}
-            ip: {{ config.internal_ip }}
+            ip: {{ config.public_ip }}
     require:
         - user: glance
         - group: glance

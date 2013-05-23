@@ -28,34 +28,17 @@ pkg-{{name}}:
 
 # Network configuration.
 {% set networks = openstack.get('networks', {}) %}
-{% set interfaces = openstack.get('interfaces', {}) %}
-{% set default_interface = salt['network.interfaces']().keys()[0] %}
-{% set public_interface = interfaces.get('public', default_interface) %}
-{% set nova_interface = interfaces.get('nova', default_interface) %}
-
-{% set default_network = salt['network.subnets']()[0] %}
 {% set public_network = networks.get('public') %}
-{% if not public_network %}
-{% set public_network = default_network %}
-{% endif %}
-{% set nova_network = networks.get('nova') %}
-{% if not nova_network %}
-{% set nova_network = default_network %}
-{% endif %}
 {% set internal_network = networks.get('internal') %}
-{% if not internal_network %}
-{% set internal_network = default_network %}
-{% endif %}
 
 # Common services configuration.
 {% set az = openstack.get('availability_zone', 'nova') %}
 {% set default_az = openstack.get('default_availability_zone', 'nova') %}
 
 # Ugly network IP extraction (automatic based on subnet from config).
-{% set _pre_cmd = "python -c 'from salt.modules.network import interfaces, _calculate_subnet; print ((([x for x in [[ip.get(\"address\") for ip in ipv4 if \"" %}
-{% set _post_cmd = "\" == _calculate_subnet(ip.get(\"address\"), ip.get(\"netmask\"))] for ipv4 in [itr.get(\"inet\") for itr in interfaces().values() if itr.get(\"inet\")]] if len(x) > 0] + [[]])[0]) + [\"\"])[0]'" %}
+{% set _pre_cmd = "python -c 'from salt.modules.network import interfaces, _calculate_subnet; addresses=[]; map(addresses.extend, [itr.get(\"inet\") for itr in interfaces().values() if itr.get(\"inet\")]); subnets=\"" %}
+{% set _post_cmd = "\".split(\",\"); matches=[addr.get(\"address\") for addr in addresses if _calculate_subnet(addr.get(\"address\"), addr.get(\"netmask\")) in subnets]; matches.append(\"0.0.0.0\"); print matches[0];'" %}
 {% set internal_ip = salt['cmd.run'](_pre_cmd + internal_network + _post_cmd) %}
-{% set nova_ip = salt['cmd.run'](_pre_cmd + nova_network + _post_cmd) %}
 {% set public_ip = salt['cmd.run'](_pre_cmd + public_network + _post_cmd) %}
 
 # Database configuration.
@@ -122,23 +105,53 @@ pkg-{{name}}:
 {% set keystone_cinder_password = keystone.get('cinder', 'cinder') %}
 {% set keystone_quantum_password = keystone.get('quantum', 'quantum') %}
 
+# VMS configuration.
+{% set vms_key = openstack.get('vms') %}
+{% macro vms(name) %}
+{% if vms_key %}
+{% set vms_pub = 'deb http://downloads.gridcentriclabs.com/packages/cobalt/%s/ubuntu/ gridcentric multiverse' % version %}
+{% set vms_priv = 'deb http://downloads.gridcentriclabs.com/packages/%s/vms/ubuntu/ gridcentric multiverse' % vms_key %}
+vms-repo-pub-{{name}}:
+    pkgrepo.managed:
+        - name: {{vms_pub}}
+        - baseurl: {{vms_pub}}
+        - humanname: gridcentric
+        - file: /etc/apt/sources.list.d/gridcentric.list
+    cmd.run:
+        - name: wget -O - http://downloads.gridcentriclabs.com/packages/gridcentric.key | sudo apt-key add -
+        - unless: sudo apt-key list | grep gridcentric
+vms-repo-priv-{{name}}:
+    pkgrepo.managed:
+        - name: {{vms_priv}}
+        - baseurl: {{vms_priv}}
+        - file: /etc/apt/sources.list.d/gridcentric.list
+    cmd.run:
+        - name: wget -O - http://downloads.gridcentriclabs.com/packages/gridcentric.key | sudo apt-key add -
+        - unless: sudo apt-key list | grep gridcentric
+vms-pkg-{{name}}:
+    pkg:
+        - name: {{name}}
+        - latest
+    require:
+        - pkgrepo: vms-repo-pub-{{name}}
+        - pkgrepo: vms-repo-priv-{{name}}
+{% endif %}
+{% endmacro %}
+
 # Debug output.
-echo internal {{ internal_ip }}:
-    cmd:
-        - run
-echo public {{ public_ip }}:
-    cmd:
-        - run
-echo nova {{ nova_ip }}:
-    cmd:
-        - run
+echo-internal:
+    cmd.run:
+        - name: echo internal "{{ internal_ip }}"
+echo-public:
+    cmd.run:
+        - name: echo public "{{ public_ip }}"
 
 {% set hosts = openstack.get('hosts', {}) %}
 {% set mysql_hosts = hosts.get('mysql', [internal_ip]) %}
 {% set rabbitmq_hosts = hosts.get('rabbitmq', [internal_ip]) %}
-{% set nova_api_hosts = hosts.get('nova', [internal_ip]) %}
-{% set cinder_api_hosts = hosts.get('cinder', [internal_ip]) %}
-{% set quantum_api_hosts = hosts.get('quantum', [internal_ip]) %}
-{% set keystone_hosts = hosts.get('keystone', [internal_ip]) %}
-{% set glance_hosts = hosts.get('glance', [internal_ip]) %}
+{% set nova_api_hosts = hosts.get('nova', [public_ip]) %}
+{% set cinder_api_hosts = hosts.get('cinder', [public_ip]) %}
+{% set quantum_api_hosts = hosts.get('quantum', [public_ip]) %}
+{% set keystone_hosts = hosts.get('keystone', [public_ip]) %}
+{% set glance_hosts = hosts.get('glance', [public_ip]) %}
 {% set novnc_hosts = hosts.get('novnc', [internal_ip]) %}

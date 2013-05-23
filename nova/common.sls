@@ -12,8 +12,14 @@ include:
             - file: /etc/nova/policy.json
             - file: /etc/nova/api-paste.ini
     require:
-        - pkg: nova-api
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
         - file: /etc/nova/api-paste.ini
 
+{{ config.vms("cobalt-api") }}
+{% if config.vms_key %}
+    require:
+        - pkg: nova-api
+    watch:
+        - pkg: nova-api
+{% endif %}
