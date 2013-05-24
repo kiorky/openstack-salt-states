@@ -31,3 +31,4 @@ include:
         - watch:
             - pkg: cobalt-compute
 {{ config.vms("vms-apparmor") }}
+{{ config.vms("vms") }}
