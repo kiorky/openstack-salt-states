@@ -19,20 +19,26 @@ include:
         - user: quantum
         - group: quantum
 
+openvswitch-brcompat:
+    pkg:
+        - installed
+
 openvswitch-switch:
+    pkg:
+        - installed
     service:
         - running
+        - watch:
+            - pkg: openvswitch-switch
 
 br-int:
     cmd.run:
-        - name: ovs-vsctl add-br br-int
-        - unless: ovs-vsctl list-br | grep br-int
+        - name: ovs-vsctl br-exists br-int || ovs-vsctl add-br br-int
     require:
          - service: openvswitch-switch
 
 br-ex:
     cmd.run:
-        - name: ovs-vsctl add-br br-ex
-        - unless: ovs-vsctl list-br | grep br-ex
+        - name: ovs-vsctl br-exists br-ex || ovs-vsctl add-br br-ex
     require:
          - service: openvswitch-switch

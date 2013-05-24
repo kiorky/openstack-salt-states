@@ -10,11 +10,6 @@ include:
         - mode: 0600
         - template: jinja
         - context:
-            debug: {{ config.debug }}
-            mysql_username: {{ config.mysql_quantum_username }}
-            mysql_password: {{ config.mysql_quantum_password }}
-            mysql_database: {{ config.mysql_quantum_database }}
-            mysql_host: {{ config.mysql_hosts|first }}
             keystone_ip: {{ config.keystone_hosts|first }}
             keystone_port: {{ config.keystone_port }}
             keystone_auth: {{ config.keystone_auth }}

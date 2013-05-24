@@ -5,7 +5,7 @@
         - source: salt://openstack/horizon/local_settings.py
         - user: root
         - group: root
-        - mode: 0600
+        - mode: 0644
         - template: jinja
         - context:
             debug: {{config.debug}}

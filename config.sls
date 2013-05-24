@@ -27,6 +27,7 @@ pkg-{{name}}:
 {% endmacro %}
 
 # Network configuration.
+{% set interfaces = openstack.get('interfaces', {}) %}
 {% set networks = openstack.get('networks', {}) %}
 {% set public_network = networks.get('public') %}
 {% set internal_network = networks.get('internal') %}
