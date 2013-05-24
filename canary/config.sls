@@ -5,6 +5,7 @@
 {% macro package(name) %}
 {{name}}:
     pkg:
+        - installed
         - latest
     pkgrepo.managed:
         - name: {{source}}

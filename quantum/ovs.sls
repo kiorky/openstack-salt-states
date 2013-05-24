@@ -30,15 +30,17 @@ openvswitch-switch:
         - running
         - watch:
             - pkg: openvswitch-switch
+        - require:
+            - pkg: openvswitch-switch
 
 br-int:
     cmd.run:
         - name: ovs-vsctl br-exists br-int || ovs-vsctl add-br br-int
-    require:
-         - service: openvswitch-switch
+        - require:
+             - service: openvswitch-switch
 
 br-ex:
     cmd.run:
         - name: ovs-vsctl br-exists br-ex || ovs-vsctl add-br br-ex
-    require:
-         - service: openvswitch-switch
+        - require:
+             - service: openvswitch-switch

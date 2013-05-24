@@ -10,12 +10,17 @@
 # support other distributions.
 {% macro package(name) %}
 keyring-{{name}}:
-    pkg.latest:
-        - name: ubuntu-cloud-keyring
+    pkg:
+        - installed:
+            - name: ubuntu-cloud-keyring
+        - latest:
+            - name: ubuntu-cloud-keyring
 pkg-{{name}}:
     pkg:
-        - name: {{name}}
-        - latest
+        - installed:
+            - name: {{name}}
+        - latest:
+            - name: {{name}}
     pkgrepo.managed:
         - name: {{source}}
         - baseurl: {{source}}
