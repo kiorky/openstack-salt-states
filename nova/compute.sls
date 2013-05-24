@@ -23,4 +23,11 @@ include:
         - enable: True
 
 {{ config.vms("cobalt-compute") }}
+    service.running:
+        - name: cobalt-compute
+        - enable: True
+        - require:
+            - pkg: cobalt-compute
+        - watch:
+            - pkg: cobalt-compute
 {{ config.vms("vms-apparmor") }}
