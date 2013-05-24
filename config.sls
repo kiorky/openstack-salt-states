@@ -11,16 +11,18 @@
 {% macro package(name) %}
 keyring-{{name}}:
     pkg:
-        - installed:
-            - name: ubuntu-cloud-keyring
-        - latest:
-            - name: ubuntu-cloud-keyring
+        - installed
+        - name: ubuntu-cloud-keyring
+pkg-{{name}}-uptodate:
+    pkg:
+        - latest
+        - name: {{name}}
+    require:
+        - pkg: pkg-{{name}}
 pkg-{{name}}:
     pkg:
-        - installed:
-            - name: {{name}}
-        - latest:
-            - name: {{name}}
+        - installed
+        - name: {{name}}
     pkgrepo.managed:
         - name: {{source}}
         - baseurl: {{source}}
@@ -134,10 +136,16 @@ vms-repo-priv-{{name}}:
     cmd.run:
         - name: wget -O - http://downloads.gridcentriclabs.com/packages/gridcentric.key | sudo apt-key add -
         - unless: sudo apt-key list | grep gridcentric
+vms-pkg-{{name}}-uptodate:
+    pkg:
+        - latest
+        - name: {{name}}
+    require:
+        - pkg: vms-pkg-{{name}}
 vms-pkg-{{name}}:
     pkg:
+        - installed
         - name: {{name}}
-        - latest
     require:
         - pkgrepo: vms-repo-pub-{{name}}
         - pkgrepo: vms-repo-priv-{{name}}

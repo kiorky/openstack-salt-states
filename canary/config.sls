@@ -3,10 +3,14 @@
 {% set source = canary.get('source', 'deb http://downloads.gridcentriclabs.com/packages/canary/%s/ubuntu gridcentric multiverse' % version) %}
 
 {% macro package(name) %}
+{{name}}-uptodate:
+    pkg.latest:
+        - name: {{name}}
+    require:
+        - pkg: {{name}}
 {{name}}:
-    pkg:
-        - installed
-        - latest
+    pkg.installed:
+        - name: {{name}}
     pkgrepo.managed:
         - name: {{source}}
         - baseurl: {{source}}
