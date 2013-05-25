@@ -44,3 +44,9 @@ br-ex:
         - name: ovs-vsctl br-exists br-ex || (ovs-vsctl add-br br-ex; ifconfig up br-ex)
         - require:
              - service: openvswitch-switch
+
+br-tun:
+    cmd.run:
+        - name: ovs-vsctl br-exists br-tun || (ovs-vsctl add-br br-tun; ifconfig up br-tun)
+        - require:
+             - service: openvswitch-switch
