@@ -35,18 +35,18 @@ openvswitch-switch:
 
 br-int:
     cmd.run:
-        - name: ovs-vsctl br-exists br-int || (ovs-vsctl add-br br-int; ifconfig up br-int)
+        - name: ovs-vsctl br-exists br-int || ovs-vsctl add-br br-int; ifconfig up br-int
         - require:
              - service: openvswitch-switch
 
 br-ex:
     cmd.run:
-        - name: ovs-vsctl br-exists br-ex || (ovs-vsctl add-br br-ex; ifconfig up br-ex)
+        - name: ovs-vsctl br-exists br-ex || ovs-vsctl add-br br-ex; ifconfig up br-ex
         - require:
              - service: openvswitch-switch
 
 br-tun:
     cmd.run:
-        - name: ovs-vsctl br-exists br-tun || (ovs-vsctl add-br br-tun; ifconfig up br-tun)
+        - name: ovs-vsctl br-exists br-tun || ovs-vsctl add-br br-tun; ifconfig up br-tun
         - require:
              - service: openvswitch-switch
