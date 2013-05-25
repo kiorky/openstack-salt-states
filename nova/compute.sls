@@ -1,7 +1,6 @@
 {% import "openstack/config.sls" as config with context %}
 include:
     - openstack.nova.base
-    - openstack.nova.common
 
 {{ config.package("nova-compute") }}
     service.running:
