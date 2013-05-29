@@ -45,6 +45,7 @@ stop-cgroups:
         - name: stop cgroup-lite
 
 {{ config.vms("vms") }}
+{{ config.vms("vms-rados") }}
 
 /etc/sysconfig/vms:
     file.managed:
@@ -52,6 +53,16 @@ stop-cgroups:
         - user: root
         - group: root
         - mode: 0644
+
+make-disk-url:
+    cmd.run:
+        - name: rados mkpool vmsdisk
+        - unless: rados lspools | grep vmsdisk
+
+make-mem-url:
+    cmd.run:
+        - name: rados mkpool vmsmem
+        - unless: rados lspools | grep vmsmem
 
 {{ config.vms("cobalt-compute") }}
     service.running:
