@@ -3,6 +3,8 @@ include:
     - ceph
     - openstack.cinder.base
 
+{{ config.package("sysfsutils") }}
+
 {{ config.package("cinder-volume") }}
     service.running:
         - name: cinder-volume
