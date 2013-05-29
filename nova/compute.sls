@@ -46,6 +46,13 @@ stop-cgroups:
 
 {{ config.vms("vms") }}
 
+/etc/sysconfig/vms:
+    file.managed:
+        - source: salt://openstack/nova/vms
+        - user: root
+        - group: root
+        - mode: 0644
+
 {{ config.vms("cobalt-compute") }}
     service.running:
         - name: cobalt-compute
@@ -54,7 +61,9 @@ stop-cgroups:
             - pkg: cobalt-compute
             - cmd: stop-apparmor
             - cmd: stop-cgroups
+            - file: /etc/sysconfig/vms
         - watch:
             - pkg: cobalt-compute
             - cmd: stop-apparmor
             - cmd: stop-cgroups
+            - file: /etc/sysconfig/vms
