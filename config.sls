@@ -117,12 +117,22 @@ pkg-{{name}}:
 {% set vms_key = openstack.get('vms') %}
 {% macro vms(name) %}
 {% if vms_key %}
-{% set vms_pub = 'deb http://downloads.gridcentriclabs.com/packages/cobalt/%s/ubuntu/ gridcentric multiverse' % version %}
+{% set vms_cobalt = 'deb http://downloads.gridcentriclabs.com/packages/cobalt/%s/ubuntu/ gridcentric multiverse' % version %}
+{% set vms_cobaltclient = 'deb http://downloads.gridcentriclabs.com/packages/cobaltclient/%s/ubuntu/ gridcentric multiverse' % version %}
 {% set vms_priv = 'deb http://downloads.gridcentriclabs.com/packages/%s/vms/ubuntu/ gridcentric multiverse' % vms_key %}
-vms-repo-pub-{{name}}:
+vms-repo-cobalt-{{name}}:
     pkgrepo.managed:
-        - name: {{vms_pub}}
-        - baseurl: {{vms_pub}}
+        - name: {{vms_cobalt}}
+        - baseurl: {{vms_cobalt}}
+        - humanname: gridcentric
+        - file: /etc/apt/sources.list.d/gridcentric.list
+    cmd.run:
+        - name: wget -O - http://downloads.gridcentriclabs.com/packages/gridcentric.key | sudo apt-key add -
+        - unless: sudo apt-key list | grep gridcentric
+vms-repo-cobaltclient-{{name}}:
+    pkgrepo.managed:
+        - name: {{vms_cobaltclient}}
+        - baseurl: {{vms_cobaltclient}}
         - humanname: gridcentric
         - file: /etc/apt/sources.list.d/gridcentric.list
     cmd.run:

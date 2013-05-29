@@ -63,6 +63,19 @@ include:
         - file: /etc/nova/nova.conf
         - file: /etc/nova/policy.json
 
+{{ config.package("nova-conductor") }}
+    service.running:
+        - name: nova-conductor
+        - enable: True
+        - watch:
+            - pkg: nova-conductor
+            - file: /etc/nova/nova.conf
+            - file: /etc/nova/policy.json
+    require:
+        - pkg: nova-conductor
+        - file: /etc/nova/nova.conf
+        - file: /etc/nova/policy.json
+
 {{ config.package("nova-cert") }}
     service.running:
         - name: nova-cert

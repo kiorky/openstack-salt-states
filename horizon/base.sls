@@ -25,6 +25,8 @@
     require:
         - file: /etc/openstack-dashboard/local_settings.py
 
+{{ config.vms("cobalt-novaclient") }}
+
 {{ config.vms("cobalt-horizon") }}
 {% if config.vms_key %}
     require:

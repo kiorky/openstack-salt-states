@@ -2,6 +2,11 @@
 include:
     - openstack.keystone.base
 
+{{ config.package("memcached") }}
+    service.running:
+        - name: memcached
+        - enable: True
+
 {{ config.package("keystone") }}
     service.running:
         - name: keystone
@@ -12,6 +17,7 @@ include:
             - file: /etc/keystone/policy.json
             - file: /etc/keystone/init.sh
     require:
+        - service: memcached
         - file: /etc/keystone/keystone.conf
         - file: /etc/keystone/policy.json
         - file: /etc/keystone/init.sh
