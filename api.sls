@@ -2,6 +2,7 @@ include:
     - openstack.glance.api
     - openstack.glance.registry
     - openstack.nova.api
+    - openstack.nova.conductor
     - openstack.nova.scheduler
     - openstack.cinder.api
     - openstack.cinder.scheduler
