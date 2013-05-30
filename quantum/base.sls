@@ -33,6 +33,13 @@ quantum:
         - user: quantum
         - group: quantum
 
+/etc/sudoers.d/quantum_sudoers:
+    file.managed:
+        - source: salt://openstack/quantum/quantum_sudoers
+        - user: root
+        - group: root
+        - mode: 0440
+
 /etc/quantum/policy.json:
     file.managed:
         - source: salt://openstack/quantum/policy.json

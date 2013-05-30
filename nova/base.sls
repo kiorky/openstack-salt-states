@@ -50,6 +50,13 @@ nova:
         - user: nova
         - group: nova
 
+/etc/sudoers.d/nova_sudoers:
+    file.managed:
+        - source: salt://openstack/nova/nova_sudoers
+        - user: root
+        - group: root
+        - mode: 0440
+
 /etc/nova/policy.json:
     file.managed:
         - source: salt://openstack/nova/policy.json

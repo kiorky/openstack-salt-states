@@ -27,6 +27,13 @@ cinder:
             ip: {{ config.internal_ip }}
             volume_port: {{ config.volume_port }}
 
+/etc/sudoers.d/cinder_sudoers:
+    file.managed:
+        - source: salt://openstack/cinder/cinder_sudoers
+        - user: root
+        - group: root
+        - mode: 0440
+
 /etc/cinder/policy.json:
     file.managed:
         - source: salt://openstack/cinder/policy.json
