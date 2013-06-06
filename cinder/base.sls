@@ -24,7 +24,7 @@ cinder:
             mysql_host: {{ config.mysql_hosts|first }}
             glance_host: {{ config.glance_hosts|first }}
             glance_port: {{ config.glance_api_port }}
-            ip: {{ config.internal_ip }}
+            ip: {{ config.public_ip }}
             volume_port: {{ config.volume_port }}
 
 /etc/sudoers.d/cinder_sudoers:
