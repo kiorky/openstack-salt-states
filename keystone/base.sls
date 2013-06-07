@@ -17,7 +17,7 @@ keystone:
             port: {{ config.keystone_port }}
             auth: {{ config.keystone_auth }}
             token: {{ config.keystone_token }}
-            keystone_ip: {{ config.keystone_hosts|first }}
+            ip: {{ config.public_ip }}
             debug: {{ config.debug }}
             mysql_username: {{ config.mysql_keystone_username }}
             mysql_password: {{ config.mysql_keystone_password }}
