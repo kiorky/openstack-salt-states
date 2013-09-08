@@ -46,8 +46,15 @@ pkg-{{name}}:
 # Ugly network IP extraction (automatic based on subnet from config).
 {% set _pre_cmd = "python -c 'from salt.modules.network import interfaces, _calculate_subnet; addresses=[]; map(addresses.extend, [itr.get(\"inet\") for itr in interfaces().values() if itr.get(\"inet\")]); subnets=\"" %}
 {% set _post_cmd = "\".split(\",\"); matches=[addr.get(\"address\") for addr in addresses if _calculate_subnet(addr.get(\"address\"), addr.get(\"netmask\")) in subnets]; matches.append(\"0.0.0.0\"); print matches[0];'" %}
+{% set internal_ip = openstack.get('internal_ip') %}
+{% if not internal_ip %}
 {% set internal_ip = salt['cmd.run'](_pre_cmd + internal_network + _post_cmd) %}
+{% endif %}
+
+{% set public_ip = openstack.get('public_ip') %}
+{% if not public_ip %}
 {% set public_ip = salt['cmd.run'](_pre_cmd + public_network + _post_cmd) %}
+{% endif %}
 
 # Database configuration.
 {% set keystone = openstack.get('keystone', {}) %}
@@ -65,6 +72,7 @@ pkg-{{name}}:
 {% set mysql_glance_database = glance.get('database', 'glance') %}
 {% set mysql_glance_username = glance.get('username', 'glance') %}
 {% set mysql_glance_password = glance.get('password', 'glance') %}
+{% set glance_store = glance.get('store', 'filesystem') %}
 
 {% set cinder = openstack.get('cinder', {}) %}
 {% set mysql_cinder_database = cinder.get('database', 'cinder') %}
@@ -96,6 +104,7 @@ pkg-{{name}}:
 {% set keystone_port = keystone.get('port', '5000') %}
 {% set keystone_auth = keystone.get('auth', '35357') %}
 {% set keystone_token = keystone.get('token', 'keystone') %}
+{% set keystone_region = keystone.get('region', 'RegionOne') %}
 
 # API configuration.
 {% set api = openstack.get('api', {}) %}
@@ -107,11 +116,15 @@ pkg-{{name}}:
 {% set glance_registry_port = glance.get('registry', '9191') %}
 
 # Keystone services.
+{% set project_tenant = openstack.get('project_tenant', 'demo') %}
+{% set project_user = openstack.get('project_user', 'demo') %}
+{% set project_password = openstack.get('project_password', 'demo') %}
 {% set service_tenant_name = keystone.get('tenant_name', 'service') %}
-{% set keystone_nova_password = keystone.get('nova', 'nova') %}
-{% set keystone_glance_password = keystone.get('glance', 'glance') %}
-{% set keystone_cinder_password = keystone.get('cinder', 'cinder') %}
-{% set keystone_quantum_password = keystone.get('quantum', 'quantum') %}
+{% set keystone_nova_password = keystone.get('nova', mysql_nova_password) %}
+{% set keystone_glance_password = keystone.get('glance', mysql_glance_password) %}
+{% set keystone_glance_username = keystone.get('glance', 'glance') %}
+{% set keystone_cinder_password = keystone.get('cinder', mysql_cinder_password) %}
+{% set keystone_quantum_password = keystone.get('quantum', mysql_quantum_password) %}
 
 # VMS configuration.
 {% set vms_key = openstack.get('vms') %}
@@ -179,3 +192,70 @@ echo-public:
 {% set keystone_hosts = hosts.get('keystone', [public_ip]) %}
 {% set glance_hosts = hosts.get('glance', [public_ip]) %}
 {% set novnc_hosts = hosts.get('novnc', [internal_ip]) %}
+{% macro os_env() %}
+    - env:
+      - SERVICE_TOKEN: {{ keystone_token }}
+      - SERVICE_ENDPOINT: http://{{keystone_hosts|first}}:{{keystone_auth}}/v2.0{% endmacro %}
+{% macro glance_cmd(name, cmd, unless='') %}
+{{ name }}:
+  cmd.run:
+    - name: {{ cmd -}}
+    {{ os_env() }}
+    {%- if unless %}
+    - unless: {{ unless }}
+    {%- endif %}
+  require:
+    - service: glance-api
+{% endmacro %}
+{% macro keystone_cmd(name, cmd, unless='') %}
+{{ name }}:
+  cmd.run:
+    - name: {{ cmd -}}
+    {{ os_env() }}
+    {%- if unless %}
+    - unless: {{ unless }}
+    {%- endif %}
+  require:
+    - service: keystone
+{% endmacro %}
+{% macro os_context_var() %}
+    - context:
+      auth: {{ keystone_auth }}
+      project_tenant: {{ project_tenant }}
+      project_user: {{ project_user }}
+      project_password: {{ project_password }}
+      username: {{ os_username }}
+      cinder_api_port: {{ volume_port }}
+      cinder_ip: {{ cinder_api_hosts|first }}
+      cinder_ips: {{ cinder_api_hosts }}
+      cinder_password: {{ keystone_cinder_password }}
+      cinder_username: cinder
+      glance_api_port: {{ glance_api_port }}
+      glance_ip: {{ glance_hosts|first }}
+      glance_ips: {{ glance_hosts }}
+      glance_username: {{ keystone_glance_username }}
+      glance_password: {{ keystone_glance_password }}
+      keystone_ip: {{ keystone_hosts|first }}
+      keystone_region: {{ keystone_region }}
+      keystone_ips: {{ keystone_hosts }}
+      mysql_database: {{ mysql_keystone_database }}
+      mysql_host: {{ mysql_hosts[0] }}
+      mysql_password: {{ mysql_keystone_password }}
+      mysql_username: {{ mysql_keystone_username }}
+      nova_api_port: {{ compute_port }}
+      nova_ip: {{ nova_api_hosts|first }}
+      nova_ips: {{ nova_api_hosts }}
+      nova_password: {{ keystone_nova_password }}
+      nova_username: nova
+      password: {{ os_password }}
+      port: {{ keystone_port }}
+      quantum_api_port: {{ network_port }}
+      quantum_ip: {{ quantum_api_hosts|first }}
+      quantum_ips: {{ quantum_api_hosts }}
+      quantum_password: {{ keystone_quantum_password }}
+      quantum_username: quantum
+      service_tenant: {{ service_tenant_name }}
+      tenant: {{ os_tenant_name }}
+      token: {{ keystone_token }}
+      {% endmacro %}
+

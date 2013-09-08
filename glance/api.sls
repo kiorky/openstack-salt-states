@@ -2,6 +2,7 @@
 include:
     - ceph
     - openstack.glance.base
+    - openstack.env
 
 /etc/glance/glance-api-paste.ini:
     file.managed:

@@ -1,0 +1,8 @@
+# managed via salt, do not edit
+function get_id {
+    echo `"$@" | grep ' id ' | awk '{print $4}'`
+} 
+. /etc/openstack/openstack.sh
+if [[ -n $SERVICE_ENDPOINT ]];then unset SERVICE_ENDPOINT;fi
+if [[ -n $SERVICE_TOKEN ]];then unset SERVICE_TOKEN;fi
+

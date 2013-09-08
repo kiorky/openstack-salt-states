@@ -1,8 +1,5 @@
 #!/usr/bin/env bash
-
-export SERVICE_TOKEN={{token}}
-export SERVICE_ENDPOINT=http://{{keystone_ip}}:{{auth}}/v2.0
-
+. /etc/openstack/openstack.sh
 # Recreate the database.
 if [ "x$KEYSTONE_CLEAN" = "xy" ]; then
     mysql -u{{mysql_username}} -p{{mysql_password}} -h{{mysql_host}} {{mysql_database}} <<EOF
