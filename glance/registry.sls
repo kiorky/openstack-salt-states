@@ -45,7 +45,7 @@ include:
             keystone_port: {{ config.keystone_port }}
             keystone_auth: {{ config.keystone_auth }}
             glance_tenant_name: {{ config.service_tenant_name }}
-            glance_username: glance
+            glance_username: {{ config.keystone_glance_username }}
             glance_password: {{ config.keystone_glance_password }}
     require:
         - user: glance

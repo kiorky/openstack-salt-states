@@ -1,6 +1,5 @@
 {% import "openstack/config.sls" as config with context %}
 include:
-    - ceph
     - openstack.glance.base
     - openstack.env
 
@@ -49,8 +48,9 @@ include:
             keystone_ip: {{ config.keystone_hosts|first }}
             keystone_port: {{ config.keystone_port }}
             keystone_auth: {{ config.keystone_auth }}
+            glance_store: {{ config.glance_store }}
             glance_tenant_name: {{ config.service_tenant_name }}
-            glance_username: glance
+            glance_username: {{ config.keystone_glance_username }}
             glance_password: {{ config.keystone_glance_password }}
             registry_host: {{ config.glance_hosts|first }}
             registry_port: {{ config.glance_registry_port }}
@@ -73,9 +73,8 @@ include:
         - file: /etc/glance/glance-api-paste.ini
         - file: /etc/glance/glance-api.conf
 
-make-images:
-    cmd.run:
-        - name: rados mkpool images
-        - unless: rados lspools | grep images
-    require:
-        - file: /etc/ceph/ceph.conf
+{{ config.glance_cmd(
+    'glance-create-db',
+    'glance-manage db_sync',
+    unless='glance image-list') }}
+
