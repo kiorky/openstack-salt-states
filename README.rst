@@ -1,11 +1,11 @@
 OpenStack Salt States
 =====================
 
-.. contents:
+.. contents::
 
-**Status** : Not all is implemented yet !
-**disclaimer** : based to deploy on ubuntu server and tested with openstack **grizzly*
-**note** : Idea is to grab as much info from pillar as we can to offer flexibility in configuration, please read the states to see avalaible options
+- :**Status**: Not all is implemented yet !
+- :**disclaimer**: based to deploy on ubuntu server and tested with openstack **grizzly*
+- :**note**: Idea is to grab as much info from pillar as we can to offer flexibility in configuration, please read the states to see avalaible options
 
 These states are flexible and extensible.
 They are designed to do large multi-node deployments, and to allow for
