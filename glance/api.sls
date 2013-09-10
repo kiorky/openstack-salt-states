@@ -84,6 +84,8 @@ include:
 {% for image, data in config.glance_images.items() -%}
 {% set imagep=config.glance_download_path+'/'+data['url'].split('/')[-1] -%}
 {% set istatename='glance-image-'+image -%}
+{% set df=data.get('disk_format', 'raw') -%}
+{% set cf=data.get('container_format', 'bare')%}
 {% set ilstatename='glance-load-image-'+image -%}
 {{istatename}}:
   file.managed:
@@ -93,7 +95,7 @@ include:
 
 {{ config.glance_cmd(
     ilstatename,
-    'glance image-create --name '+image+' --disk-format=raw --container-format=bare < '+imagep,
+    'glance image-create --name '+image+' --disk-format='+df+' --container-format='+cf+' < '+imagep,
     requires=['file: '+istatename],
     unless='glance image-show '+image) }}
 {% endfor %}
