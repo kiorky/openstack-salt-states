@@ -25,16 +25,16 @@ Choices
 ------------
 - Mysql to store databases
 - Rabbitmq for the queuing system
-- Cinder/Switch with Ceph backend for the obs / rbd system
+- Cinder/Swift with Ceph backend for the obs / rbd system
 
 Architecture
 -----------------
 States
 +++++++++++++++++++++
 
-Backend sStates
+Backend states
 ****************
-Some states were made to leverage the initialisation are related technologies were openstack is configured upon
+Some states were made to leverage the initialisation of related tools & databases which openstack will use
 
 Rabbitmq
 ~~~~~~~~~~
@@ -52,14 +52,13 @@ Openstack parts
 ****************
 Keystone
 ~~~~~~~~~~
-- Include **openstack.keystone.{api,registry}.sls** to initialise a keystone server and all openstack based services, tenants, users and roles
+- Include **openstack.keystone.api.sls** to initialise a keystone server and all openstack based services, tenants, users and roles
 glance
 ~~~~~~~~~~
+- Include **openstack.keystone.{api,registry}.sls** to initialise a keystone server and all openstack based services, tenants, users and roles
+- We include in glance registry as a default ubuntu images (**i386**, **adm64**) from **12.10** to **13.04**
 neutron/quantum (quantum atm) server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-glance
-~~~~~~~~~~~~~
-- We include as a default ubuntu images (i386, adm64) from 12.10 to 13.04
 cinder
 ~~~~~~~~~~~~~
 nova compute
