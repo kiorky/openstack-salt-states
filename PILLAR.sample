@@ -3,7 +3,7 @@
 
 openstack:
   version: grizzly
-  availability_zone: online_dc3
+  availability_zone: 'xxxx'
   project_tenant: 'xxxx'
   project_user: 'xxxx'
   project_password: 'xxxx'
