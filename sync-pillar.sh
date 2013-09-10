@@ -7,4 +7,5 @@ for i in $keys;do
     sed -re "s/(.*$i)(=|:\s+).*/\1\2'xxxx'/g" -i $P
 done
 sed -re "/rpn_ip/d" -i $P
+sed -re "/# lxc host/d" -i $P
 cat $P

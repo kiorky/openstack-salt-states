@@ -12,7 +12,6 @@ openstack:
     password: 'xxxx'
     tenant_name: 'xxxx'
   internal_ip: {{ ip }}
-  # lxc host
   public_ip: {{ ip }}
   rabbit:
     vhost: 'xxxx'
