@@ -1,0 +1,54 @@
+{% set mysql_root='xxxx'
+{% set ip="10.0.3.2" %}
+
+openstack:
+  version: grizzly
+  availability_zone: online_dc3
+  project_tenant: 'xxxx'
+  project_user: 'xxxx'
+  project_password: 'xxxx'
+  admin:
+    username: admin
+    password: 'xxxx'
+    tenant_name: 'xxxx'
+  internal_ip: {{ ip }}
+  # lxc host
+  public_ip: {{ ip }}
+  rabbit:
+    vhost: 'xxxx'
+    user: openstack_user
+    password: 'xxxx'
+  root:
+    password: 'xxxx'
+  keystone:
+    tenant_name: 'xxxx'
+    password: 'xxxx'
+    token: 'xxxx'
+    region: 'xxxx'
+  nova:
+    password: 'xxxx'
+  cinder:
+    password: 'xxxx'
+  quantum:
+    password: 'xxxx'
+  glance:
+    password: 'xxxx'
+  horizon:
+    password: 'xxxx'
+  hosts:
+    mysql: [127.0.0.1]
+    rabbitmq: [127.0.0.1]
+    novnc: [127.0.0.1]
+    keystone: [{{ ip }}]
+    nova:  [{{ ip }}]
+    cinder: [{{ ip }}]
+    quantum: [{{ ip }}]
+
+mysql.host: "127.0.0.1"
+mysql.db: mysql
+mysql.user: root
+
+#mysql.password: 'xxxx'
+#mysql.passwd: {{ mysql_root }}
+mysql.pass: {{ mysql_root }}
+
