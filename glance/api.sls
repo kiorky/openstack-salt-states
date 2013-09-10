@@ -73,8 +73,33 @@ include:
         - file: /etc/glance/glance-api-paste.ini
         - file: /etc/glance/glance-api.conf
 
+
+{{config.glance_download_path}}:
+  file.directory: []
+
 {{ config.glance_cmd(
     'glance-create-db',
     'glance-manage db_sync',
     unless='glance image-list') }}
+{% for image, data in config.glance_images.items() -%}
+{% set imagep=config.glance_download_path+'/'+data['url'].split('/')[-1] -%}
+{% set istatename='glance-image-'+image -%}
+{% set ilstatename='glance-load-image-'+image -%}
+{{istatename}}:
+  file.managed:
+    - name: {{imagep}}
+    - source: {{data['url']}}
+    - source_hash: {{data['hash']}}
+
+{{ config.glance_cmd(
+    ilstatename,
+    'glance image-create --name '+image+' --disk-format=raw --container-format=bare < '+imagep,
+    requires=['file: '+istatename],
+    unless='glance image-show '+image) }}
+{% endfor %}
+
+
+
+
+
 

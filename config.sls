@@ -3,6 +3,12 @@
 {% set version = openstack.get('version', 'grizzly') %}
 {% set source = openstack.get('source', 'deb http://ubuntu-cloud.archive.canonical.com/ubuntu precise-updates/%s main' % version) %}
 
+{% import_yaml "openstack/glance/images.sls" as default_glance_images %}
+{% set glance_images=openstack.get('glance-images', False) %}
+{% if glance_images == False %}
+  {% set glance_images=default_glance_images.images %}
+{% endif %}
+
 # Packaging.
 # NOTE: This goes hand-in-hand with the source listed above.
 # For the time being, these recipes only support Ubuntu precise w/
@@ -114,6 +120,7 @@ pkg-{{name}}:
 {% set network_port = api.get('volume', '9696') %}
 {% set glance_api_port = glance.get('api', '9292') %}
 {% set glance_registry_port = glance.get('registry', '9191') %}
+{% set glance_download_path = glance.get('download_path', '/root/glance_images') %}
 
 # Keystone services.
 {% set project_tenant = openstack.get('project_tenant', 'demo') %}
@@ -194,24 +201,35 @@ echo-public:
 {% set novnc_hosts = hosts.get('novnc', [internal_ip]) %}
 {% macro os_env() %}
     - env:
+      - OS_AUTH_URL: http://{{keystone_hosts|first}}:{{keystone_auth}}/v2.0
+      - OS_USERNAME:  {{ os_username }}
+      - OS_TENANT_NAME: {{os_tenant_name}}
+      - OS_PASSWORD: {{os_password}}
+      - OS_REGION_NAME: {{keystone_region}}{% endmacro %}
+{% macro os_init_env() %}
+    - env:
       - SERVICE_TOKEN: {{ keystone_token }}
       - SERVICE_ENDPOINT: http://{{keystone_hosts|first}}:{{keystone_auth}}/v2.0{% endmacro %}
-{% macro glance_cmd(name, cmd, unless='') %}
+{% macro glance_cmd(name, cmd, unless='', requires=None) %}
+{% if not requires %}{% set requires=[] %}{% endif -%}
+{% set dummy=requires.append('service: glance-api') %}
 {{ name }}:
   cmd.run:
     - name: {{ cmd -}}
     {{ os_env() }}
     {%- if unless %}
     - unless: {{ unless }}
-    {%- endif %}
+    {% endif %}
   require:
-    - service: glance-api
+    {% for r in requires -%}
+    - {{r}}
+    {% endfor -%}
 {% endmacro %}
 {% macro keystone_cmd(name, cmd, unless='') %}
 {{ name }}:
   cmd.run:
     - name: {{ cmd -}}
-    {{ os_env() }}
+    {{ os_init_env() }}
     {%- if unless %}
     - unless: {{ unless }}
     {%- endif %}
