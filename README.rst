@@ -57,10 +57,10 @@ glance
 ~~~~~~~~~~
 - Include **openstack.keystone.{api,registry}.sls** to initialise a keystone server and all openstack based services, tenants, users and roles
 - We include in glance registry as a default ubuntu images (**i386**, **adm64**) from **12.10** to **13.04**
+cinder
+~~~~~~~
 neutron/quantum (quantum atm) server
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-cinder
-~~~~~~~~~~~~~
 nova compute
 ~~~~~~~~~~~~~
 quantum/neutron network node
